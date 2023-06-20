@@ -17,18 +17,64 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-use App\Http\Controllers\TokoController;
-
-Route::prefix('toko')->group(function () {
-
-    Route::get('/',
-        [TokoController::class, 'index']);
-
-    Route::get('/profile',
-        [TokoController::class, 'profile']);
-
-    Route::get('/about',
-        [TokoController::class, 'about']);
-    
+Route::get('/profile', function () {
+    return view('profile');
+});
+Route::get('/form', function () {
+    return view('form');
 });
 
+Route::get('/input', [InputController::class, 'index']);
+Route::post('/output', [InputController::class, 'output']);
+
+Route::prefix('toko')->group(function () {
+    Route::get('/', [TokoController::class, 'index']);
+    Route::get('/detail', [TokoController::class, 'detail']);
+    Route::get('/about', [TokoController::class, 'about']);
+});
+
+use App\Http\Controllers\tokocontroller;
+
+
+
+route::prefix('toko')->group(function(){
+
+
+    route::get('/',
+        [tokocontroller::class, 'index']);
+
+    route::get('/detail',
+        [tokocontroller::class, 'detail']);
+
+    route::get('/about',
+        [tokocontroller::class, 'about']);
+
+
+    route::group(['middleware' => ['auth']], function(){
+
+
+    route::get('/admin',
+        [tokocontroller::class, 'admin'])->name('product.admin');
+
+    route::get('/create',
+        [tokocontroller::class, 'create'])->name('product.create');
+
+    route::post('/',
+        [tokocontroller::class, 'store'])->name('product.store');
+    
+    });
+
+
+    
+
+   
+});
+
+
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
